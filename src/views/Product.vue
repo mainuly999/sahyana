@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="quantity">
                                     <!-- <router-link to="/cart" class="primary-btn pd-cart"> -->
-                                    <a @click="saveKeranjang(productDetails.id)" href="#" class="primary-btn pd-cart"> Add To Cart </a> 
+                                    <a @click="saveKeranjang(productDetails.id, productDetails.name,productDetails.price,productDetails.galleries[0].photo)" href="#" class="primary-btn pd-cart"> Add To Cart </a> 
                                     <!-- </router-link> -->
                                 </div>
                             </div>
@@ -106,8 +106,15 @@ export default {
         // replace value gambar default dengan dari API (galleries)
         this.gambar_default = data.galleries[0].photo;
       },
-      saveKeranjang(idProduct){
-        this.keranjangUser.push(idProduct);
+      saveKeranjang(idProduct,nameProduct,hargaProduct, photoProduct){
+        let productStored = {
+            "id":idProduct,
+            "name":nameProduct,
+            "price":hargaProduct,
+            "photo":photoProduct
+        }   
+
+        this.keranjangUser.push(productStored);
         const parsed = JSON.stringify(this.keranjangUser);
         localStorage.setItem('keranjangUser', parsed);
       }
