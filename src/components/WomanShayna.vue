@@ -63,7 +63,7 @@ export default {
     mounted(){
         // get(url yang ada pada psotman bagian product)
         axios.get("http://127.0.0.1:8000/api/products")
-            // kemudain res itu untnutk mengambi data diatas, nah kenpa 3 datanya karena data pertama itu general seperti meta,data,dll kemudian data kedua adalah spesifik dnegna nama data begipula data ketiga
+            // kemudain res itu untnutk mengambi data diatas, nah kenpa 3 datanya karena data pertama itu general kemudian yang kedua seperti meta,data,dll sesuai id kemudian data ketiga adalah spesifik dnegna nama data 
             .then(res=>(this.products = res.data.data.data))
             .catch(err=>console.log(err));
 
