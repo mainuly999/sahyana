@@ -44,13 +44,15 @@
                                     <h3>{{productDetails.name}}</h3>
                                 </div>
                                 <div class="pd-desc">
-                                    <p>
-                                       {{productDetails.description}}
+                                    <p v-html="productDetails.description">
+                                     
                                     </p>
                                     <h4>${{productDetails.price}}</h4>
                                 </div>
                                 <div class="quantity">
-                                    <router-link to="/cart" class="primary-btn pd-cart">Add To Cart</router-link>
+                                    <!-- <router-link to="/cart" class="primary-btn pd-cart"> -->
+                                    <a @click="saveKeranjang(productDetails.id)" href="#" class="primary-btn pd-cart"> Add To Cart </a> 
+                                    <!-- </router-link> -->
                                 </div>
                             </div>
                         </div>
@@ -87,13 +89,8 @@ export default {
   data(){
       return {
           gambar_default:'',
-          thumbs:[
-              'img/mickey1.jpg',
-              'img/mickey2.jpg',
-              'img/mickey3.jpg',
-              'img/mickey4.jpg'
-          ],
-          productDetails:[]
+          productDetails:[],
+          keranjangUser:[]
       }
   },
  
@@ -108,10 +105,21 @@ export default {
         this.productDetails = data;
         // replace value gambar default dengan dari API (galleries)
         this.gambar_default = data.galleries[0].photo;
+      },
+      saveKeranjang(idProduct){
+        this.keranjangUser.push(idProduct);
+        const parsed = JSON.stringify(this.keranjangUser);
+        localStorage.setItem('keranjangUser', parsed);
       }
   },
   mounted(){
-       
+        if(localStorage.getItem('keranjangUser')){
+            try{
+                this.keranjangUser = JSON.parse(localStorage.getItem('keranjangUser'));
+            } catch(e){
+                localStorage.removeItem('keranjangUser');
+            }
+        }
         axios.get("http://127.0.0.1:8000/api/products/",{
             params:{
                 id:this.$route.params.id
