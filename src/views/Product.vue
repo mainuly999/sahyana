@@ -26,25 +26,13 @@
                             <div class="product-pic-zoom">
                                 <img class="product-big-img" v-bind:src="gambar_default" alt="" />
                             </div>
-                            <div class="product-thumbs">
+                            <div class="product-thumbs" v-if="productDetails.galleries.length > 0">
                                 <carousel class="product-thumbs-track ps-slider" :dots="false" :nav="false">
                                     <!-- <div class="pt " v-for="gambar in thumbs" :key="gambar" :data-imgbigurl="gambar" @click="changeImage(gambar)">
                                         <img :src="gambar" alt="" v-bind:class="gambar == gambar_default && thumb ? 'active' : ''" />
                                     </div> -->
-                                    <div class="pt" @click="changeImage(thumbs[0])" v-bind:class="thumbs[0] == gambar_default ? 'active': ''">
-                                        <img src="img/mickey1.jpg" alt="" />
-                                    </div>
-
-                                    <div class="pt" @click="changeImage(thumbs[1])" v-bind:class="thumbs[1] == gambar_default ? 'active': ''">
-                                        <img src="img/mickey2.jpg" alt="" />
-                                    </div>
-
-                                    <div class="pt" @click="changeImage(thumbs[2])" v-bind:class="thumbs[2] == gambar_default ? 'active': ''">
-                                        <img src="img/mickey3.jpg" alt="" />
-                                    </div>
-
-                                    <div class="pt" @click="changeImage(thumbs[3])" v-bind:class="thumbs[3] == gambar_default ? 'active': ''">
-                                        <img src="img/mickey4.jpg" alt="" />
+                                    <div v-for="ss in productDetails.galleries " v-bind:key="ss.id" class="pt" @click="changeImage(ss.photo)" v-bind:class="ss.photo == gambar_default ? 'active': ''">
+                                        <img v-bind:src="ss.photo" alt="" />
                                     </div>
                                 </carousel>
                             </div>
@@ -98,7 +86,7 @@ export default {
   },
   data(){
       return {
-          gambar_default:'img/mickey1.jpg',
+          gambar_default:'',
           thumbs:[
               'img/mickey1.jpg',
               'img/mickey2.jpg',
@@ -108,11 +96,18 @@ export default {
           productDetails:[]
       }
   },
+ 
   methods:{
       changeImage(urlImage){
           this.gambar_default = urlImage;
         // eslint-disable-next-line no-console
         console.log(this.idProduct);
+      },
+      setDataPicture(data){
+        //   replace object productDetails diatas dengan data dari API
+        this.productDetails = data;
+        // replace value gambar default dengan dari API (galleries)
+        this.gambar_default = data.galleries[0].photo;
       }
   },
   mounted(){
@@ -123,7 +118,7 @@ export default {
             }
         })
         // duaji datanya karena sudah mi diklik quick view artinya sudah masuk satu data 
-            .then(res=>(this.productDetails = res.data.data))
+            .then(res=>(this.setDataPicture(res.data.data)))
             .catch(err=>console.log(err));    
     }
 };
