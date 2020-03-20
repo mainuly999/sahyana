@@ -31,39 +31,36 @@
                                     Keranjang Belanja &nbsp;
                                     <a href="#">
                                         <i class="icon_bag_alt"></i>
-                                        <span>3</span>
+                                        <span>{{keranjangUser.length}}</span>
                                     </a>
                                     <div class="cart-hover">
                                         <div class="select-items">
                                             <table>
-                                                <tbody>
-                                                    <tr>
+                                                <tbody v-if="keranjangUser.length > 0">
+
+                                                    
+                                                    <tr v-for="isina in keranjangUser" v-bind:key="isina.id">
                                                         <td class="si-pic">
-                                                            <img src="img/select-product-1.jpg" alt="" />
+                                                            <!-- untuk src kita gak usah pakai {} kita tinggal binding saja dengan : or v-bind-->
+                                                            <img class="photo-item" v-bind:src="isina.photo" alt="" />
                                                         </td>
                                                         <td class="si-text">
                                                             <div class="product-selected">
-                                                                <p>$60.00 x 1</p>
-                                                                <h6>Kabino Bedside Table</h6>
+                                                                <p>${{isina.price}} x 1</p>
+                                                                <h6>{{isina.name}}</h6>
                                                             </div>
                                                         </td>
                                                         <td class="si-close">
                                                             <i class="ti-close"></i>
                                                         </td>
                                                     </tr>
+                                                   
+
+                                                </tbody>
+
+                                                <tbody v-else>
                                                     <tr>
-                                                        <td class="si-pic">
-                                                            <img src="img/select-product-2.jpg" alt="" />
-                                                        </td>
-                                                        <td class="si-text">
-                                                            <div class="product-selected">
-                                                                <p>$60.00 x 1</p>
-                                                                <h6>Kabino Bedside Table</h6>
-                                                            </div>
-                                                        </td>
-                                                        <td class="si-close">
-                                                            <i class="ti-close"></i>
-                                                        </td>
+                                                        <td>Tidak Ada Isi Dalam Keranjang</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -89,6 +86,28 @@
 </template>
 <script>
 export default {
-    name:'HeaderShayna'
+    name:'HeaderShayna',
+    data(){
+      return {
+          keranjangUser:[]
+      }
+    },
+    // jika keranjangUser tersedia dalam local storage maka dia akan memasukan ke kerangjangUser diatas
+    mounted(){
+         if(localStorage.getItem('keranjangUser')){
+            try{
+                this.keranjangUser = JSON.parse(localStorage.getItem('keranjangUser'));
+            } catch(e){
+                localStorage.removeItem('keranjangUser');
+            }
+        }
+    }
 }
 </script>
+
+<style scoped>
+.photo-item{
+    width: 80px;
+    height:80px;
+}
+</style>
