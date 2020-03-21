@@ -37,7 +37,7 @@
                                         <tbody>
                                             <tr v-for="isina in keranjangUser" v-bind:key="isina.id">
                                                 <td class="cart-pic first-row">
-                                                    <img src="img/cart-page/product-1.jpg" />
+                                                    <img class="image-cart" :src="isina.photo" />
                                                 </td>
                                                 <td class="cart-title first-row text-center">
                                                     <h5>{{isina.name}}</h5>
@@ -84,9 +84,9 @@
                                 <div class="proceed-checkout text-left">
                                     <ul>
                                         <li class="subtotal">ID Transaction <span>#SH12000</span></li>
-                                        <li class="subtotal mt-3">Subtotal <span>$240.00</span></li>
-                                        <li class="subtotal mt-3">Pajak <span>10%</span></li>
-                                        <li class="subtotal mt-3">Total Biaya <span>$440.00</span></li>
+                                        <li class="subtotal mt-3">Subtotal <span>${{totalHarga}}.00</span></li>
+                                        <li class="subtotal mt-3">Pajak <span>${{ditambahPajak}}.00(10%)</span></li>
+                                        <li class="subtotal mt-3">Total Biaya <span>${{totalBiaya}}.00</span></li>
                                         <li class="subtotal mt-3">Bank Transfer <span>Mandiri</span></li>
                                         <li class="subtotal mt-3">No. Rekening <span>2208 1996 1403</span></li>
                                         <li class="subtotal mt-3">Nama Penerima <span>Shayna</span></li>
@@ -135,6 +135,28 @@ export default {
                 localStorage.removeItem('keranjangUser');
             }
         }
+    },
+    computed:{
+        totalHarga(){
+            // reduce itu seperti melooping tetapi selain looping dia juga akan menghitung
+            return this.keranjangUser.reduce(function(items,data){
+                return items + data.price;
+                // data.price itu diambil dari data array keranjangUser 
+            },0)
+        },
+        ditambahPajak(){
+            return (this.totalHarga*10/100);
+        },
+        totalBiaya(){
+            return(this.totalHarga + this.ditambahPajak);
+        }
     }
 }
 </script>
+
+<style  scoped>
+.image-cart{
+    width: 100px;
+    height: 100px;
+}
+</style>

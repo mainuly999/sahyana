@@ -67,11 +67,11 @@
                                         </div>
                                         <div class="select-total">
                                             <span>total:</span>
-                                            <h5>$120.00</h5>
+                                            <h5>${{totalHarga}},00</h5>
                                         </div>
                                         <div class="select-button">
                                             
-                                            <a href="#" class="primary-btn view-card"><router-link to="/cart">VIEW CARD</router-link></a>
+                                            <a href="#" class="primary-btn view-card"><router-link to="/cart" style="color:#FFF">VIEW CARD</router-link></a>
                                             
                                             <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
                                         </div>
@@ -110,6 +110,15 @@ export default {
                 localStorage.removeItem('keranjangUser');
             }
         }
+    },
+    computed:{
+        totalHarga(){
+            // reduce itu seperti melooping tetapi selain looping dia juga akan menghitung
+            return this.keranjangUser.reduce(function(items,data){
+                return items + data.price;
+                // data.price itu diambil dari data array keranjangUser 
+            },0)
+        }
     }
 }
 </script>
@@ -119,7 +128,5 @@ export default {
     width: 80px;
     height:80px;
 }
-.view-card{
-    color:white;
-}
+
 </style>
