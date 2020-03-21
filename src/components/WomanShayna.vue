@@ -12,7 +12,7 @@
                                 <img v-bind:src="itemProduct.galleries[0].photo" alt="" />
                                 <ul>
                                     <li class="w-icon active">
-                                        <a href="#"><i class="icon_bag_alt"></i></a>
+                                        <a @click="saveKeranjang(itemProduct.id, itemProduct.name,itemProduct.price,itemProduct.galleries[0].photo)" href="#"><i class="icon_bag_alt"></i></a>
                                     </li>
                                     <!-- kita ingin id khusus agar ketika diklik maka akan menuju ke produk yang dituju -->
                                     <!-- setellah itu atur dirouter -->
@@ -56,11 +56,32 @@ export default {
     },
     data(){
         return{
-            products:[]
+            products:[],
+            keranjangUser:[]
+        }
+    },
+    methods:{
+        saveKeranjang(idProduct,nameProduct,hargaProduct, photoProduct){
+            let productStored = {
+                "id":idProduct,
+                "name":nameProduct,
+                "price":hargaProduct,
+                "photo":photoProduct
+            }
+            this.keranjangUser.push(productStored);
+            const parsed = JSON.stringify(this.keranjangUser);
+            localStorage.setItem('keranjangUser', parsed);   
         }
     },
     // ambil dari API
     mounted(){
+         if(localStorage.getItem('keranjangUser')){
+            try{
+                this.keranjangUser = JSON.parse(localStorage.getItem('keranjangUser'));
+            } catch(e){
+                localStorage.removeItem('keranjangUser');
+            }
+        }
         // get(url yang ada pada psotman bagian product)
         axios.get("http://127.0.0.1:8000/api/products")
             // kemudain res itu untnutk mengambi data diatas, nah kenpa 3 datanya karena data pertama itu general kemudian yang kedua seperti meta,data,dll sesuai id kemudian data ketiga adalah spesifik dnegna nama data 

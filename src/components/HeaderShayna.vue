@@ -50,7 +50,7 @@
                                                                 <h6>{{isina.name}}</h6>
                                                             </div>
                                                         </td>
-                                                        <td class="si-close">
+                                                        <td @click="removeItem(keranjangUser.index)" class="si-close">
                                                             <i class="ti-close"></i>
                                                         </td>
                                                     </tr>
@@ -70,7 +70,9 @@
                                             <h5>$120.00</h5>
                                         </div>
                                         <div class="select-button">
-                                            <a href="#" class="primary-btn view-card">VIEW CARD</a>
+                                            
+                                            <a href="#" class="primary-btn view-card"><router-link to="/cart">VIEW CARD</router-link></a>
+                                            
                                             <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
                                         </div>
                                     </div>
@@ -92,7 +94,14 @@ export default {
           keranjangUser:[]
       }
     },
-    // jika keranjangUser tersedia dalam local storage maka dia akan memasukan ke kerangjangUser diatas
+    methods:{
+       removeItem(index){
+            this.keranjangUser.splice(index,1);
+            const parsed = JSON.stringify(this.keranjangUser);
+            localStorage.setItem('keranjangUser', parsed);
+       } 
+    },
+    // jika keranjangUser tersedia dalam local storage maka dia akan memasukan ke data kerangjangUser diatas
     mounted(){
          if(localStorage.getItem('keranjangUser')){
             try{
@@ -109,5 +118,8 @@ export default {
 .photo-item{
     width: 80px;
     height:80px;
+}
+.view-card{
+    color:white;
 }
 </style>

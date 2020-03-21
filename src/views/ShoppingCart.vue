@@ -35,29 +35,17 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <tr v-for="isina in keranjangUser" v-bind:key="isina.id">
                                                 <td class="cart-pic first-row">
                                                     <img src="img/cart-page/product-1.jpg" />
                                                 </td>
                                                 <td class="cart-title first-row text-center">
-                                                    <h5>Pure Pineapple</h5>
+                                                    <h5>{{isina.name}}</h5>
                                                 </td>
-                                                <td class="p-price first-row">$60.00</td>
-                                                <td class="delete-item"><a href="#"><i class="material-icons">
-                                                close
-                                                </i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="cart-pic first-row">
-                                                    <img src="img/cart-page/product-1.jpg" />
-                                                </td>
-                                                <td class="cart-title first-row text-center">
-                                                    <h5>Pure Pineapple</h5>
-                                                </td>
-                                                <td class="p-price first-row">$60.00</td>
-                                                <td class="delete-item"><a href="#"><i class="material-icons">
-                                                close
-                                                </i></a></td>
+                                                <td class="p-price first-row">${{isina.price}}</td>
+                                                <td @click="removeItem(keranjangUser.index)" class="si-close"><i class="ti-close">
+                                          
+                                                </i></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -125,6 +113,28 @@ export default {
     components:{
         HeaderShayna,
         FooterShayna
+    },
+    data(){
+      return {
+          keranjangUser:[]
+      }
+    },
+    methods:{
+       removeItem(index){
+            this.keranjangUser.splice(index,1);
+            const parsed = JSON.stringify(this.keranjangUser);
+            localStorage.setItem('keranjangUser', parsed);
+       } 
+    },
+    // jika keranjangUser tersedia dalam local storage maka dia akan memasukan ke data kerangjangUser diatas
+    mounted(){
+         if(localStorage.getItem('keranjangUser')){
+            try{
+                this.keranjangUser = JSON.parse(localStorage.getItem('keranjangUser'));
+            } catch(e){
+                localStorage.removeItem('keranjangUser');
+            }
+        }
     }
 }
 </script>
